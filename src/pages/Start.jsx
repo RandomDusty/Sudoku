@@ -1,5 +1,7 @@
 import React from 'react';
 import MyButton from "../components/UI/Button/MyButton";
+import {Link} from "react-router-dom";
+import '../styles/Start.css';
 
 
 const Start = () => {
@@ -17,9 +19,11 @@ const Start = () => {
                     </span>
             </p>
             <div className='MyButton'>
-                <MyButton>
-                    Play
-                </MyButton>
+                <Link to={'/game'}>
+                    <MyButton>
+                        Play
+                    </MyButton>
+                </Link>
             </div>
         </div>
     );
