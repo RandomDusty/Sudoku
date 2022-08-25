@@ -13,7 +13,5 @@ export default class GameService {
         } catch (e) {
             console.log(e)
         }
-
-
     }
 }

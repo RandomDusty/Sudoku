@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useFetching} from "../hooks/useFetching";
 import GameService from "../API/GameService";
 import classNames from "classnames";
+import {checkBlock, checkColumn, checkRow} from "../utils/board";
 
 
 const Board = () => {
@@ -9,39 +10,51 @@ const Board = () => {
     const [board, setBoard] = useState([]);
     const [rowFocus, setRowFocus] = useState(-1);
     const [colFocus, setColFocus] = useState(-1);
-    // const [lastChange, setLastChange] = useState([-1,-1])
-    // const [notValidCells, setNotValidCells] = useState([])
+    const [lastChangeValue, setLastChangeValue] = useState(-1);
+    const [lastChange, setLastChange] = useState([-1, -1]);
+    const [invalidCells, setInvalidCells] = useState([]);
+    const [invalidRows, setInvalidRows] = useState([]);
+    const [invalidCols, setInvalidCols] = useState([]);
+    const [invalidBlocks, setInvalidBlocks] = useState([]);
 
-    const [fetchPosts, isBoardLoading, postError] = useFetching(async (diff = 'easy') => {
+    const [fetchBoard, isBoardLoading, postError] = useFetching(async (diff = 'easy') => {
         const response = await GameService.createSudoku(diff);
         setInitialBoard(response);
         setBoard(response);
     })
 
     useEffect(() => {
-        fetchPosts();
+        fetchBoard();
     }, [])
 
-    // useEffect(() => {
-    //     checkRow()
-    // }, [lastChange])
+    useEffect(() => {
+        if (lastChange[0] !== -1){
+            let changedValue = board[lastChange[0]][lastChange[1]];
+            let temporaryRows = invalidRows;
+            let temporaryCols = invalidCols;
+            let temporaryBlocks = invalidBlocks;
+            let isDeleted = false;
 
+            if (!board[lastChange[0]][lastChange[1]]) {
+                temporaryRows = temporaryRows.filter(val => val !== '' + lastChange[0] + lastChange[1]);
+                temporaryCols = temporaryCols.filter(val => val !== '' + lastChange[0] + lastChange[1]);
+                temporaryBlocks = temporaryBlocks.filter(val => val !== '' + lastChange[0] + lastChange[1]);
+                changedValue = lastChangeValue;
+                isDeleted = true;
+            }
 
-    // const checkRow = () => {
-    //     const arr = board.find((val, index) => index === lastChange[0]);
-    //     if (arr) {
-    //         arr.map((val, index) => {
-    //             if(val === board[lastChange[0]][lastChange[1]])
-    //             {
-    //                 // setNotValidCells([...notValidCells, [lastChange[0], index]])
-    //                 console.log([lastChange[0], index])
-    //             }
-    //             return
-    //         })
-    //
-    //         console.log('----')
-    //     }
-    // }
+            let rows = checkRow(board, lastChange,temporaryRows, changedValue, isDeleted);
+            let cols = checkColumn(board, lastChange,temporaryCols, changedValue, isDeleted);
+            let blocks = checkBlock(board, lastChange,temporaryBlocks, changedValue, isDeleted)
+
+            setInvalidCells([...rows, ...cols, ...blocks]);
+            setInvalidRows(rows);
+            setInvalidCols(cols);
+            setInvalidBlocks(blocks);
+        }
+
+    }, [lastChange])
+
 
     const getDeepCopy = (arr) => {
         return JSON.parse(JSON.stringify(arr))
@@ -51,11 +64,12 @@ const Board = () => {
         let grid = getDeepCopy(board);
         let val = parseInt(e.code[e.code.length - 1]);
         if (e.keyCode === 8 || e.keyCode === 46 || e.keyCode === 48) {
+            setLastChangeValue(grid[row][col])
             grid[row][col] = 0;
         } else if (val >= 1 && val <= 9) {
             grid[row][col] = val;
         }
-        // setLastChange([row,col])
+        setLastChange([row,col])
         setBoard(grid);
     }
 
@@ -84,10 +98,10 @@ const Board = () => {
                                     onChange={(e) => {
                                         e.preventDefault()
                                     }}
-                                    className={classNames('cellInput',
-                                        cIndex === colFocus || rIndex === rowFocus ? 'rowColFocus' : '')}
-                                    // notValidCells.includes([rIndex,cIndex]) ? 'notValidCells' : '')}
                                     disabled={initialBoard[rIndex][cIndex]}
+                                    className={classNames('cellInput',
+                                        cIndex === colFocus || rIndex === rowFocus ? 'rowColFocus' : '',
+                                        invalidCells.findIndex(elem => elem === '' + rIndex + cIndex) !== -1 ? 'notValidCells' : '')}
                                     onKeyDown={(e) => {
                                         onInputKeyDown(e, rIndex, cIndex)
                                     }}
