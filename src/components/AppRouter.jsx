@@ -7,7 +7,7 @@ const AppRouter = () => {
     return (
         <Routes>
             <Route path='/' element={<Start/>}/>
-            <Route path='/game' element={<Game/>}/>
+            <Route path='/game/:diff' element={<Game/>}/>
         </Routes>
     );
 };

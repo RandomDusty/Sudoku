@@ -11,7 +11,9 @@ export const useFetching = (callback) => {
         } catch (e) {
             setError(e.message);
         } finally {
-            setIsLoading(false);
+            setTimeout(() => {
+                setIsLoading(false)
+            }, 500)
         }
     }
 

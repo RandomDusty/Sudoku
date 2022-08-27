@@ -52,7 +52,7 @@ h1 {
     flex-direction: column;
     justify-content: center;
     color: #4E596B;
-    margin-top: 45px;
+    margin-top: 25px;
 }
 
 .subText {
@@ -60,5 +60,56 @@ h1 {
 }
 
 .MyButton {
-    margin-top: 40px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.arrows {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.diffText {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 15px;
+    color: #4E596B;
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    margin: 0 15px;
+    width: 64px;
+}
+
+.arrows {
+    margin-top: 30px;
+}
+
+.arrow {
+    opacity: 0.3;
+    border: 1px solid #000000;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.arrow:hover {
+    background: #307DF6;
+    border-color: #307DF6;
+    color: #FFFFFF;
+    opacity: 1;
+}
+
+.arrow_hidden {
+    opacity: 0;
 }
