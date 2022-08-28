@@ -29,11 +29,13 @@ const Game = () => {
 		}
 	}, [modalResult]);
 
-	
-    
-    useEffect(() => {
-			saveValue('diffIndex', diff);
-		}, [diff]);
+	useEffect(() => {
+		document.title = 'Game';
+	}, []);
+
+	useEffect(() => {
+		saveValue('diffIndex', diff);
+	}, [diff]);
 
 	return (
 		<div className='startBd'>
@@ -48,16 +50,25 @@ const Game = () => {
 				<Board diff={diff} className='gameBoard' />
 			</div>
 			<Modal active={modalActive} setActive={setModalActive}>
-				<span className='modalText'>Are you sure you want to start a new game?</span>
-				<div style={{ display: 'flex', flexDirection: 'row',  marginTop: '15px'}}>
+				<span className='modalText'>
+					Are you sure you want to start a new game?
+				</span>
+				<div
+					style={{ display: 'flex', flexDirection: 'row', marginTop: '15px' }}
+				>
 					<MyButton
-						style={{ width: '60px', height: '30px', padding: 0, marginRight: '10px'}}
+						style={{
+							width: '60px',
+							height: '30px',
+							padding: 0,
+							marginRight: '10px',
+						}}
 						onClick={() => setModalResult(true)}
 					>
 						Yes
 					</MyButton>
 					<MyButton
-						style={{ width: '60px', height: '30px', padding: 0}}
+						style={{ width: '60px', height: '30px', padding: 0 }}
 						onClick={() => setModalActive(false)}
 					>
 						No

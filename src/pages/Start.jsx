@@ -22,60 +22,62 @@ const Start = () => {
 		saveValue('invalidBlocks', '');
 		navigate('/game/' + diff[diffIndex], { replace: true });
 	};
-
+	useEffect(() => {
+		document.title = 'Sudoku';
+	}, []);
 	return (
-		<div className='startBd'>
-			<div className='topBg'>
-				<h1>Sudoku</h1>
-			</div>
+			<div className='startBd'>
+				<div className='topBg'>
+					<h1>Sudoku</h1>
+				</div>
 
-			<p className='text'>
-				<span>
-					To place a number in a square —{' '}
-					<span className='subText'>type the</span>
-					<br />
-					<span className='subText'>number on your keyboard</span> after
-					clicking on it
-				</span>
-			</p>
+				<p className='text'>
+					<span>
+						To place a number in a square —{' '}
+						<span className='subText'>type the</span>
+						<br />
+						<span className='subText'>number on your keyboard</span> after
+						clicking on it
+					</span>
+				</p>
 
-			{getValue('board') && (
+				{getValue('board') && (
+					<div className='MyButton'>
+						<Link to={'/game/' + getValue('diffIndex')}>
+							<MyButton>Continue</MyButton>
+						</Link>
+						<p className='text'>
+							<span style={{ fontSize: '20px' }}>
+								<span className='subText'>OR</span>
+							</span>
+						</p>
+					</div>
+				)}
+
+				<div className='arrows'>
+					<div
+						className={diffIndex === 0 ? 'arrow_hidden' : 'arrow'}
+						onClick={() => {
+							if (diffIndex) setDiffIndex(diffIndex - 1);
+						}}
+					>
+						<KeyboardArrowLeftIcon sx={{ display: 'flex' }} color='#000000' />
+					</div>
+					<span className='diffText'>{diff[diffIndex].toUpperCase()}</span>
+					<div
+						className={diffIndex === 2 ? 'arrow_hidden' : 'arrow'}
+						onClick={() => {
+							if (diffIndex !== 2) setDiffIndex(diffIndex + 1);
+						}}
+					>
+						<KeyboardArrowRightIcon sx={{ display: 'flex' }} color='#000000' />
+					</div>
+				</div>
+
 				<div className='MyButton'>
-					<Link to={'/game/' + getValue('diffIndex')}>
-						<MyButton>Continue</MyButton>
-					</Link>
-					<p className='text'>
-						<span style={{ fontSize: '20px' }}>
-							<span className='subText'>OR</span>
-						</span>
-					</p>
-				</div>
-			)}
-
-			<div className='arrows'>
-				<div
-					className={diffIndex === 0 ? 'arrow_hidden' : 'arrow'}
-					onClick={() => {
-						if (diffIndex) setDiffIndex(diffIndex - 1);
-					}}
-				>
-					<KeyboardArrowLeftIcon sx={{ display: 'flex' }} color='#000000' />
-				</div>
-				<span className='diffText'>{diff[diffIndex].toUpperCase()}</span>
-				<div
-					className={diffIndex === 2 ? 'arrow_hidden' : 'arrow'}
-					onClick={() => {
-						if (diffIndex !== 2) setDiffIndex(diffIndex + 1);
-					}}
-				>
-					<KeyboardArrowRightIcon sx={{ display: 'flex' }} color='#000000' />
+					<MyButton onClick={newGame}>Play new game</MyButton>
 				</div>
 			</div>
-
-			<div className='MyButton'>
-				<MyButton onClick={newGame}>Play new game</MyButton>
-			</div>
-		</div>
 	);
 };
 
